@@ -1,7 +1,10 @@
+body{
+    background: beige;
+}
 *{
     margin: 0;
     padding: 0;
-    font-family: Algerian;
+    font-family: CityBlueprint;
     box-sizing: border-box;
 }
 .container{
@@ -21,6 +24,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    text-decoration: underline;
 }
 .todo-app h2 img{
     width: 30px;
@@ -33,6 +37,7 @@
     border-radius: 30px;
     padding-left: 20px;
     margin-bottom: 25px;
+    font-size: 22px;
 }
 
 input{
@@ -41,7 +46,7 @@ input{
     outline: none;
     background: transparent;
     padding: 10px;
-    font-weight: 14;
+    font-size: 22px;
 }
 
 button{
@@ -51,15 +56,20 @@ button{
     font-size: 16px;
     cursor: pointer;
     border-radius: 50%;
+    background: burlywood;
+
 }
 
 ul li{
     list-style: none;
     font-size: 17px;
-    padding: 12px 8px 12px 50px;
+    padding: 17px 8px 13px 50px;
     user-select: none;
     cursor:  pointer;
+    background: burlywood;
     position: relative;
+    border-radius: 20px;
+    margin: 5px;
 }
 ul li::before{
     content: '';
@@ -76,6 +86,7 @@ ul li::before{
 
 ul li.checked{
     text-decoration: line-through;
+
 }
 
 ul li .checked::before{
@@ -95,5 +106,8 @@ ul li span{
 }
 
 ul li span:hover{
-
+}
+.reminder {
+    font-size: 12px;
+    color: #888;
 }
