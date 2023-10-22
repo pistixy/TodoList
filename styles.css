@@ -7,11 +7,6 @@ body{
     font-family: CityBlueprint;
     box-sizing: border-box;
 }
-.container{
-    width: 100%;
-    min-height: 100vh;
-    padding: 10px;
-}
 
 .todo-app{
     width: 100%;
@@ -110,4 +105,8 @@ ul li span:hover{
 .reminder {
     font-size: 12px;
     color: #888;
+}
+
+.error{
+    color: red;
 }

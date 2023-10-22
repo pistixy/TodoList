@@ -1,84 +1,70 @@
-// Check if the browser supports notifications and request permission
-if ('Notification' in window) {
-    Notification.requestPermission();
-}
+const row= document.querySelector('.row');
+const inputBox = document.querySelector('#input-box');
+const reminderInput =document.querySelector('#reminder-input');
+const msg =document.querySelector('.msg')
+const listContainer =document.querySelector('#list-container');
+row.addEventListener('submit', onSubmit);
+const today = new Date();
+const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+const dateTime = date+' '+time;
 
-const inputBox = document.getElementById("input-box");
-const reminderInput = document.getElementById("reminder-input");
-const listContainer = document.getElementById("list-container");
+window.addEventListener('load', function () {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.forEach(function (task) {
+        createTaskElement(task);
+    });
+});
 
-function addTask() {
-    const taskText = inputBox.value.trim();
-    const reminderTime = new Date(reminderInput.value);
+function createTaskElement(taskText) {
+    const li = document.createElement('li');
+    li.appendChild(document.createTextNode(taskText));
 
-    if (taskText === '' || isNaN(reminderTime)) {
-        alert("You must enter a task and set a valid reminder time.");
-        return;
-    }
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', function () {
+        listContainer.removeChild(li);
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const index = tasks.indexOf(taskText);
+        if (index !== -1) {
+            tasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    });
 
-    const li = document.createElement("li");
-    li.textContent = taskText;
-
-    const reminderDisplay = document.createElement("span");
-    reminderDisplay.className = "reminder";
-    reminderDisplay.textContent = formatReminderTime(reminderTime);
-
-    // Create a close button
-    const span = document.createElement("span");
-    span.innerHTML = "\u00d7";
-
-    li.appendChild(reminderDisplay);
-    li.appendChild(span);
+    li.appendChild(deleteButton);
     listContainer.appendChild(li);
+}
 
-    const now = new Date();
-    const timeUntilReminder = reminderTime - now;
+function onSubmit(e) {
+    e.preventDefault();
 
-    if (timeUntilReminder <= 0) {
-        alert("The reminder time must be in the future.");
-        return;
+    if (inputBox.value === '' || reminderInput.value === '') {
+        msg.classList.add('error');
+        msg.innerHTML = 'Please fill the fields!';
+        setTimeout(() => msg.remove(), 3000);
+    } else {
+        const taskText = inputBox.value + ' task at: ' + reminderInput.value;
+        createTaskElement(taskText);
+
+        // Save the task to localStorage
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(taskText);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+        inputBox.value = '';
+        reminderInput.value = '';
+
+        const reminderTime = new Date(reminderInput.value).getTime();
+
+        const currentTime = new Date().getTime();
+        const timeDifference = reminderTime - currentTime;
+
+        if (timeDifference > 0) {
+            setTimeout(function () {
+                alert('It is time to do the task: ' + taskText);
+            }, timeDifference);
+        }
     }
-
-    if (Notification.permission === 'granted') {
-        // Schedule a notification for the reminder time
-        setTimeout(() => {
-            const notification = new Notification('Reminder', {
-                body: taskText
-            });
-        }, timeUntilReminder);
-    }
-
-    inputBox.value = "";
-    reminderInput.value = "";
-    saveData();
 }
 
-function formatReminderTime(reminderTime) {
-    const options = {month: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return reminderTime.toLocaleDateString('en-US', options);
-}
-
-
-// Add click event listener for marking tasks as checked and removing them
-listContainer.addEventListener("click", function(e) {
-    if (e.target.tagName === "LI") {
-        e.target.classList.toggle("checked");
-        saveData();
-    } else if (e.target.tagName === "SPAN") {
-        e.target.parentElement.remove();
-        saveData();
-    }
-}, false);
-
-// Function to save task data in local storage
-function saveData() {
-    localStorage.setItem("data", listContainer.innerHTML);
-}
-
-// Function to show tasks retrieved from local storage
-function showTask() {
-    listContainer.innerHTML = localStorage.getItem("data");
-}
-
-// Initialize the task list from local storage
-showTask();

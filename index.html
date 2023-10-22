@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Todo List</title>
-    <link rel=stylesheet href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
       <div class="todo-app">
           <h2>Todo List <img src="images/icon.png"></h2>
-          <div class="row">
+          <form class="row">
+              <div class="msg"></div>
               <label>Task:<input type="text" id="input-box" placeholder="Add your text..."></label>
               <label>Remind me at:<input type="datetime-local" id="reminder-input" ></label>
-              <button onclick="addTask()">Add</button>
-          </div>
+              <button type="submit">Add</button>
+          </form>
 
           <ul id="list-container">
 
           </ul>
       </div>
-    </div>
 <script src="script.js">    </script>
 </body>
 </html>
