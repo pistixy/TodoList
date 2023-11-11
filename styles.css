@@ -110,3 +110,7 @@ ul li span:hover{
 .error{
     color: red;
 }
+
+.completed{
+    text-decoration: line-through;
+}

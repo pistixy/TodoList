@@ -55,12 +55,16 @@ function onSubmit(e) {
         inputBox.value = '';
         reminderInput.value = '';
 
-        const reminderTime = new Date(reminderInput.value).getTime();
+        // Convert reminderInput value to a Date object in Budapest time
+        const reminderTime = new Date(reminderInput.value);
+        reminderTime.setTime(reminderTime.getTime() + (60 - reminderTime.getTimezoneOffset()) * 60 * 1000);
 
-        const currentTime = new Date().getTime();
+        // Calculate the time difference in milliseconds
+        const currentTime = new Date();
         const timeDifference = reminderTime - currentTime;
 
         if (timeDifference > 0) {
+            // Schedule an alert after the time difference has passed
             setTimeout(function () {
                 alert('It is time to do the task: ' + taskText);
             }, timeDifference);
